@@ -30,9 +30,27 @@ class Day22 {
         return erosionLevel;
     }
 
+    getEstimatedCost(x, y, elapsed) {
+        let k = Math.floor(1.1 * (Math.abs(x - this.target.x) + Math.abs(y - this.target.y)) + elapsed);
+        return k;
+    }
+
     getType(x, y) {
         // 0=Rocky, 1=Wet, 2=Narrow
         return this.getErosionLevel(x, y) % 3;
+    }
+
+    sort(queue) {
+        let bestIndex = 0, bestValue = Infinity;
+
+        for (let i = 0; i < queue.length; i++) {
+            if (queue[i].estimate < bestValue) {
+                bestIndex = i;
+                bestValue = queue[i].estimate;
+            }
+        }
+
+        return [queue[bestIndex]].concat(queue.slice(0, bestIndex), queue.slice(bestIndex + 1));
     }
 
     run() {
@@ -105,7 +123,9 @@ class Day22 {
             }
         };
 
+        let examined = 0;
         while (true) {
+            examined++;
             region = queue.shift();
             if (region.x === this.target.x && region.y === this.target.y) {
                 if (region.gear === 'T') {
@@ -123,10 +143,42 @@ class Day22 {
             explore(region, region.x, region.y + 1);
             explore(region, region.x - 1, region.y);
 
-            // Always examine paths with the least time elapsed first
-            queue = queue.sort((a, b) => {
-                return a.elapsed - b.elapsed;
-            });
+            queue.forEach(a => a.estimate = this.getEstimatedCost(a.x, a.y, a.elapsed));
+
+            // Sort paths
+            //
+            // Going breadth first (sort by elapsed) is classic flood fill, it allows
+            // us to eliminate more nodes in the queue quicker (because we reach the
+            // edge of the 150% filter), but you end up examing many more nodes.
+            //
+            // For my input, it takes ~624,000 examined nodes, with a consistent queue of
+            // ~2200 nodes being sorted for each step, ending at the solution of 1078.
+            //
+            // Going best-estimate-first (sort by estimated) is more like an A*, we
+            // examine far fewer nodes before reaching an answer, but each node takes
+            // more time because the queue of nodes to sort is longer. Total time is
+            // lower overall.
+            //
+            // For my input, it takes ~219,000 examined nodes, with a consistent queue of
+            // ~4200 nodes being sorted each step, ending at the solution of 1078.
+            //
+            // An additional optimization is not sorting, but just grabbing the most promising
+            // node and shoving it to the front of the queue.
+            //
+            // Finally, by slightly favoring distance to target over elapsed time, we can "tighten"
+            // the search and reduce total nodes examined to ~168,000. For my input, 10% works;
+            // going to 50% ends the search instantly with an incorrect solution. In practice you
+            // would want the highest weight you can use without going over the cost of swapping gear.
+            //queue = queue.sort((a, b) => a.estimate - b.estimate);
+            queue = this.sort(queue);
+
+            // Now trim the queue - anything with an estimated cost of 50% higher than
+            // our current best estimate, we can discard. (Arbitrary.)
+            queue = queue.filter(a => a.estimate < queue[0].estimate * 1.5);
+
+            if (examined % 1000 === 0) {
+                console.log([examined, queue.length, queue[queue.length - 1].elapsed, queue[queue.length - 1].estimate]);
+            }
         }
 
         // Print final location, including elapsed minutes
