@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------
 // Year 2018 Day 01
 // ------------------------------------------------------------------------
-const { log } = require('../../util');
+const { log, success } = require('../../util');
 
 module.exports = function solve(lines) {
   //// Part 1 /////
@@ -10,7 +10,7 @@ module.exports = function solve(lines) {
     freq += parseInt(line, 10);
   }
   let result1 = freq;
-  log(`Part 1: ${result1}`);
+  success('Part 1', result1);
 
   //// Part 2 ////
   freq = 0;
@@ -27,5 +27,5 @@ module.exports = function solve(lines) {
     }
   }
   let result2 = freq;
-  log(`Part 2: ${result2}`);
+  success('Part 2', result2);
 };

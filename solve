@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // ------------------------------------------------------------------------
-// imports
+// solver cli
 // ------------------------------------------------------------------------
 const chalk = require('chalk');
 const fs = require('fs');
@@ -9,9 +9,6 @@ const glob = require('glob');
 const sprintf = require('sprintf-js').sprintf;
 const yargs = require('yargs');
 
-// ------------------------------------------------------------------------
-// solver
-// ------------------------------------------------------------------------
 class UsageError extends Error { }
 
 function clearCache() {
@@ -22,14 +19,14 @@ function clearCache() {
 }
 
 function solve(year, day, input) {
+  let title = sprintf('Year %04d Day %02d', year, day);
+  console.log('Solving ' + chalk.yellow(title) + ' (input=' + input + ')');
+
   let lines = fs.readFileSync(input, 'utf8').split('\n');
   if (lines[lines.length - 1].length === 0) lines.pop();
   require(sprintf('./src/%04d/%02d', year, day))(lines);
 }
 
-// ------------------------------------------------------------------------
-// main
-// ------------------------------------------------------------------------
 function main() {
   const argv = yargs
     .boolean('watch')
