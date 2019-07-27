@@ -4,9 +4,14 @@
 const chalk = require('chalk');
 
 const util = {
-  log: console.log,
-  success: (title, value) => {
-    util.log('  ' + title + ': ' + chalk.green(value));
+  log: {
+    info: console.log,
+    part1: value => {
+      util.log.info('  Part 1: ' + chalk.green(value));
+    },
+    part2: value => {
+      util.log.info('  Part 2: ' + chalk.green(value));
+    }
   }
 };
 

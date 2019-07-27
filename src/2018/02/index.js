@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------
 // Year 2018 Day 02
 // ------------------------------------------------------------------------
-const { log, success } = require('../../util');
+const { log } = require('../../util');
 
 function countOccurrences(line) {
     let hash = {};
@@ -61,9 +61,9 @@ function findIdenticalChars(lines) {
 module.exports = function solve(lines) {
     //// Part 1 ////
     let result1 = checksum(lines);
-    success('Part 1', result1);
+    log.part1(result1);
 
     //// Part 2 ////
     let result2 = findIdenticalChars(lines);
-    success('Part 2', result2);
+    log.part2(result2);
 };

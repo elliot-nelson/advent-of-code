@@ -19,12 +19,17 @@ function clearCache() {
 }
 
 function solve(year, day, input) {
+  let startTime = new Date().getTime();
+
   let title = sprintf('Year %04d Day %02d', year, day);
   console.log('Solving ' + chalk.yellow(title) + ' (input=' + input + ')');
 
   let lines = fs.readFileSync(input, 'utf8').split('\n');
   if (lines[lines.length - 1].length === 0) lines.pop();
   require(sprintf('./src/%04d/%02d', year, day))(lines);
+
+  let endTime = new Date().getTime();
+  console.log(sprintf('Finished (%07.4f seconds)', (endTime - startTime) / 1000));
 }
 
 function main() {
