@@ -1,0 +1,62 @@
+#!/usr/bin/env node
+
+// ------------------------------------------------------------------------
+// imports
+// ------------------------------------------------------------------------
+const chalk = require('chalk');
+const fs = require('fs');
+const glob = require('glob');
+const sprintf = require('sprintf-js').sprintf;
+const yargs = require('yargs');
+
+// ------------------------------------------------------------------------
+// solver
+// ------------------------------------------------------------------------
+class UsageError extends Error { }
+
+function clearCache() {
+  let re = new RegExp(process.cwd() + '/src');
+  Object.keys(require.cache).filter(key => re.test(key)).forEach(key => {
+    delete require.cache[key];
+  });
+}
+
+function solve(year, day, input) {
+  let lines = fs.readFileSync(input, 'utf8').split('\n');
+  if (lines[lines.length - 1].length === 0) lines.pop();
+  require(sprintf('./src/%04d/%02d', year, day))(lines);
+}
+
+// ------------------------------------------------------------------------
+// main
+// ------------------------------------------------------------------------
+function main() {
+  const argv = yargs
+    .boolean('watch')
+    .parse();
+
+  let year = parseInt(argv._[0], 10);
+  let day = parseInt(argv._[1], 10);
+  let input = argv.input || sprintf('src/%04d/%02d/input.txt', year, day);
+
+  if (!year || !day) {
+    throw new UsageError('Usage: solve <year> <day> [--watch] [--input file.txt]');
+  }
+
+  if (!fs.existsSync(input)) {
+    throw new UsageError('Invalid input file specified.');
+  }
+
+  solve(year, day, input);
+}
+
+try {
+  main();
+} catch (error) {
+  process.exitCode = 1;
+  if (error instanceof UsageError) {
+    console.error(chalk.red(error.message));
+  } else {
+    console.error(chalk.red(error.stack));
+  }
+}
