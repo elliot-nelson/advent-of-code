@@ -5,11 +5,20 @@
 // ------------------------------------------------------------------------
 const chalk = require('chalk');
 const fs = require('fs');
+const fse = require('fs-extra');
 const glob = require('glob');
 const sprintf = require('sprintf-js').sprintf;
 const yargs = require('yargs');
 
 class UsageError extends Error { }
+
+function puzzleFolder(year, day) {
+  return sprintf('src/%04d/%02d', year, day);
+}
+
+function puzzleTitle(year, day) {
+  return sprintf('Year %04d Day %02d', year, day);
+}
 
 function clearCache() {
   let re = new RegExp(process.cwd() + '/src');
@@ -21,8 +30,7 @@ function clearCache() {
 function solve(year, day, input) {
   let startTime = new Date().getTime();
 
-  let title = sprintf('Year %04d Day %02d', year, day);
-  console.log('Solving ' + chalk.yellow(title) + ' (input=' + input + ')');
+  console.log('Solving ' + chalk.yellow(puzzleTitle(year, day)) + ' (input=' + input + ')');
 
   let lines = fs.readFileSync(input, 'utf8').split('\n');
   if (lines[lines.length - 1].length === 0) lines.pop();
@@ -34,12 +42,24 @@ function solve(year, day, input) {
 
 function main() {
   const argv = yargs
+    .boolean('init')
     .boolean('watch')
     .parse();
 
   let year = parseInt(argv._[0], 10);
   let day = parseInt(argv._[1], 10);
-  let input = argv.input || sprintf('src/%04d/%02d/input.txt', year, day);
+  let folder = puzzleFolder(year, day);
+  let input = argv.input || `${folder}/input.txt`;
+
+  if (argv.init) {
+    if (fse.existsSync(`${folder}/index.js`)) {
+      throw new UsageError('Cannot initialize existing puzzle solution.');
+    }
+    fse.mkdirpSync(folder);
+    fse.copyFileSync('src/template.js', `${folder}/index.js`);
+    console.log('Initialized puzzle for ' + chalk.yellow(puzzleTitle(year, day)) + `: ${folder}/index.js`);
+    return;
+  }
 
   if (!year || !day) {
     throw new UsageError('Usage: solve <year> <day> [--watch] [--input file.txt]');
