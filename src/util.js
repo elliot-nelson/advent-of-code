@@ -13,6 +13,11 @@ const util = {
       util.log.info('  Part 2: ' + chalk.green(value));
     }
   },
+  sum(...args) {
+    let total = 0;
+    for (let arg of args) total += arg;
+    return total;
+  },
   fill2d(width, height, value) {
     let array = [];
     for (let y = 0; y < height; y++) {
