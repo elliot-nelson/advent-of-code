@@ -1,9 +1,9 @@
 // ------------------------------------------------------------------------
 // Year YYYY Day DD
 // ------------------------------------------------------------------------
-const { log } = require('../../util');
+import { log } from '../../util';
 
-module.exports = function solve(lines) {
+export function solve(input: string[]) {
   //// Part 1 ////
   let result1 = 0;
   log.part1(result1);
