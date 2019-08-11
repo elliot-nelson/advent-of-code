@@ -18,6 +18,20 @@ const util = {
     for (let arg of args) total += arg;
     return total;
   },
+  sequence(start, end) {
+    let list = [];
+    for (let i = start; i <= end; i++) {
+      list.push(i);
+    }
+    return list;
+  },
+  stringToHex(string) {
+    let result = '';
+    for (let i = 0; i < string.length; i++) {
+      result += ('00' + string.charCodeAt(i).toString(16)).slice(-2);
+    }
+    return result;
+  },
   fill2d(width, height, value) {
     let array = [];
     for (let y = 0; y < height; y++) {
