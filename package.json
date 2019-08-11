@@ -1,8 +1,8 @@
 {
   "name": "advent-of-code",
-  "version": "1.0.0",
-  "description": "> Yet another Advent of Code solution collection, written in JavaScript.",
-  "main": "solve.js",
+  "version": "2.0.0",
+  "description": "> Yet another Advent of Code solution collection, written in JavaScript/TypeScript.",
+  "main": "solve.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,14 +17,17 @@
   },
   "homepage": "https://github.com/elliot-nelson/advent-of-code#readme",
   "devDependencies": {
+    "@types/node": "^12.7.1",
     "chalk": "^2.4.2",
     "chokidar": "^3.0.2",
     "cli-cursor": "^3.1.0",
     "fs-extra": "^8.1.0",
     "glob": "^7.1.4",
     "mkdirp": "^0.5.1",
-    "ora": "^3.4.0",
     "sprintf-js": "^1.1.2",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3",
     "yargs": "^13.3.0"
-  }
+  },
+  "dependencies": {}
 }
