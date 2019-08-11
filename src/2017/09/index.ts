@@ -3,7 +3,7 @@
 // ------------------------------------------------------------------------
 import { log } from '../../util';
 
-function parse(input) {
+function parse(input: string): any[] {
   let state = 'group';
   let stack: any[] = [[]];
 
@@ -43,7 +43,7 @@ function parse(input) {
   return stack[0][0];
 }
 
-function computeScore(group, level) {
+function computeScore(group: any[], level: number): number {
   let score = level;
   for (let subgroup of group) {
     if (Array.isArray(subgroup)) {
@@ -53,7 +53,7 @@ function computeScore(group, level) {
   return score;
 }
 
-function computeGarbageChars(group) {
+function computeGarbageChars(group: any[]): number {
   let chars = 0;
   for (let subgroup of group) {
     if (Array.isArray(subgroup)) {
@@ -69,7 +69,6 @@ export function solve(input: string[]) {
   //// Part 1 ////
   let groups = parse(input[0]);
   let result1 = computeScore(groups, 1);
-  console.log(JSON.stringify(result1));
   log.part1(result1);
 
   //// Part 2 ////
