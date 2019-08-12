@@ -42,15 +42,12 @@ function getAllConnected(graph: Map<number, number[]>, root: number) {
 
 function getAllGroups(graph: Map<number, number[]>) {
   let groups = [];
-  let remaining = [...graph.keys()];
+  let remaining = new Set<number>(graph.keys());
 
-  while (remaining.length > 0) {
-    let g = getAllConnected(graph, remaining[0]);
+  while (remaining.size > 0) {
+    let g = getAllConnected(graph, remaining.values().next().value);
     groups.push(g);
-    for (let id of g) {
-      let idx = remaining.indexOf(id);
-      if (idx >= 0) remaining.splice(idx, 1);
-    }
+    for (let id of g) remaining.delete(id);
   }
 
   return groups;
