@@ -10,6 +10,7 @@
 // player to determine what move to make. You could trade space for time
 // and keep the lowest-cost chains in the first flood fill, and select
 // from that based on "reading order".
+//
 // My second delay was caused by not reading the instructions (doh) -
 // I didn't realize you could move AND attack in one turn. Luckily this
 // easy to fix once I realized it. To troubleshoot this I ended up building
@@ -21,7 +22,37 @@
 // ------------------------------------------------------------------------
 import { log } from '../../util';
 
-function createState(originalMap, power) {
+// I'll take things that have X,Y components for $200
+interface Point {
+  x: number;
+  y: number;
+}
+
+// The combatants
+interface Entity extends Point {
+  team: string;
+  hp: number;
+  attack: number;
+}
+
+// Flood fill targets (cost = distance to or from)
+interface Fill extends Point {
+  cost: number;
+}
+
+// Power definition (for goblins and elves)
+interface Power {
+  E: number;
+  G: number;
+}
+
+// Our state object, contains the map we're fighting on and entity state
+interface State {
+  map: string[][];
+  entities: Entity[];
+}
+
+function createState(originalMap: string[][], power: Power): State {
   let entities = [], map = [];
 
   for (let y = 0; y < originalMap.length; y++) {
@@ -38,11 +69,11 @@ function createState(originalMap, power) {
   return { map, entities };
 }
 
-function sortYX(list) {
+function sortYX(list: Point[]): void {
   list.sort((a, b) => a.y === b.y ? a.x - b.x : a.y - b.y);
 }
 
-function selectAttackTarget(entity, state) {
+function selectAttackTarget(entity: Entity, state: State): Entity {
   // Determine all possible "targets" - adjacent enemies
   let targets = state.entities.filter(e => e.team !== entity.team);
   targets = targets.filter(e => {
@@ -66,7 +97,7 @@ function selectAttackTarget(entity, state) {
   return targets[0];
 }
 
-function selectTargetSquare(entity, state) {
+function selectTargetSquare(entity: Entity, state: State): Fill {
   let visited = state.map.map(row => []);
   let targets = [];
   let queue = [{ x: entity.x, y: entity.y, cost: 0 }];
@@ -126,7 +157,7 @@ function selectTargetSquare(entity, state) {
   return targets[0];
 }
 
-function selectMovement(entity, targetSquare, state) {
+function selectMovement(entity: Entity, targetSquare: Fill, state: State) {
   let visited = state.map.map(row => []);
   let queue = [{ x: targetSquare.x, y: targetSquare.y, cost: 1 }];
 
@@ -174,7 +205,9 @@ function selectMovement(entity, targetSquare, state) {
   return moves[0];
 }
 
-function performRound(state) {
+// A single round of combat, returning TRUE if this round was a complete, successful
+// round, and FALSE otherwise.
+function performRound(state: State): boolean {
   sortYX(state.entities);
 
   if (state.entities.length === 0) return false;
@@ -202,6 +235,11 @@ function performRound(state) {
     if (attackTarget) {
       attackTarget.hp -= entity.attack;
       if (attackTarget.hp <= 0) {
+        // This is a super error-prone way to do this (removing an entity in the
+        // middle of processing). A better way would be to just remove all entities
+        // with no HP afterwards in a separate filter; however, all the rest of my
+        // code would need to be adjusted to not treat entities with no HP as blocking
+        // the board, etc. This is just an easy hack.
         let idx = state.entities.indexOf(attackTarget);
         state.entities.splice(idx, 1);
         if (idx <= i) i--;
@@ -212,7 +250,8 @@ function performRound(state) {
   return true;
 }
 
-function render(state) {
+// Draw current state, like on the puzzle page
+function render(state: State): string {
   let map = state.map.map(row => row.concat());
   let data = state.map.map(row => []);
   for (let entity of state.entities) {
@@ -223,7 +262,8 @@ function render(state) {
   return map.reduce((string, row, idx) => string + '\n' + row.join('') + '    ' + data[idx].join(', '), '');
 }
 
-function performBattle(state) {
+// Perform the entier battle and return the "result" (HP * Rounds).
+function performBattle(state: State): number {
   let roundsCompleted = 0;
 
   for (;;) {
@@ -242,7 +282,8 @@ function performBattle(state) {
   return remainingHp * roundsCompleted;
 }
 
-function findLowestElfPower(input) {
+// For Part 2, repeatedly perform the battle until elves have no losses
+function findLowestElfPower(input: string[]): number {
   let elfPower = 4;
 
   for (;;) {
