@@ -5,11 +5,9 @@
 // ------------------------------------------------------------------------
 import chalk from 'chalk';
 import * as fse from 'fs-extra';
-import * as glob from 'glob';
 import { sprintf } from 'sprintf-js';
 import * as yargs from 'yargs';
 import * as chokidar from 'chokidar';
-import * as readline from 'readline';
 
 function puzzleFolder(year: number, day: number) {
   return sprintf('src/%04d/%02d', year, day);
@@ -68,8 +66,6 @@ class UsageError extends Error { }
 
 class Watcher {
   private chokky: chokidar.FSWatcher;
-  private rl: readline.Interface;
-  private inputs: string[];
   private currentInput: string;
   private year: number;
   private day: number;
@@ -78,10 +74,6 @@ class Watcher {
     this.year = year;
     this.day = day;
     this.currentInput = input;
-    this.rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
 
     this.chokky = chokidar.watch('src');
     this.chokky.on('ready', () => {
@@ -106,45 +98,6 @@ class Watcher {
       solve(parseInt(year, 10), parseInt(day, 10), this.currentInput);
     } catch (error) {
       console.log(chalk.red(error.stack));
-    }
-
-    this.prompt();
-  }
-
-  refreshInputs() {
-    let folder = puzzleFolder(this.year, this.day);
-    let inputs: string[] = glob.sync(`${folder}/*.txt`);
-    inputs.sort((a, b) => {
-      if (a.endsWith('input.txt')) return -1;
-      if (b.endsWith('input.txt')) return 1;
-      return a.localeCompare(b);
-    });
-    this.inputs = inputs.map(x => x.replace(`${folder}/`, ''));
-  }
-
-  prompt() {
-    this.refreshInputs();
-    let output = this.inputs.map((name, idx) => {
-      let selected = this.currentInput === name;
-      let text = `[${idx + 1}] ${name}`;
-      return selected ? chalk.bgGreen(text) : text;
-    }).join(' ');
-    output += chalk.red(' [q] exit') + '\n' + chalk.blue('> ');
-    this.rl.question(output, answer => {
-      this.handleInput(answer);
-    });
-  }
-
-  handleInput(str: string) {
-    let parsed = parseInt(str, 10);
-    if (parsed) {
-      let input = this.inputs[parsed - 1];
-      this.fileChanged(`${puzzleFolder(this.year, this.day)}/${input}`);
-    } else if (str === 'q' || str === 'Q') {
-      process.exit(0);
-    } else {
-      console.log(chalk.red('Huh?'));
-      this.prompt();
     }
   }
 }

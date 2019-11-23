@@ -1,6 +1,6 @@
 # Advent of Code
 
-> Yet another Advent of Code solution collection, written in JavaScript.
+> Yet another Advent of Code solution collection, written in JavaScript/TypeScript.
 
 ## What is this?
 
