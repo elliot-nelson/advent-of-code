@@ -1,0 +1,17 @@
+{
+  "name": "08",
+  "version": "1.0.0",
+  "description": "",
+  "main": "node 08a.js",
+  "scripts": {
+    "test": "node 08a.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nyc": "^13.1.0"
+  },
+  "dependencies": {
+    "request": "^2.88.0"
+  }
+}

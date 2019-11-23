@@ -19,25 +19,25 @@ After the dust settles, I might clean up my code (naming, debris), but I don't c
 
 Run the solution for a puzzle:
 
-    ./solve 2017 05
+    ./solve.ts 2017 05
 
 > This executes the solution `src/2017/05/index.js` against `src/2017/05/input.txt`.
 
 Provide an alternate input file:
 
-    ./solve 2017 05 --input src/2017/05/example1.txt
+    ./solve.ts 2017 05 --input src/2017/05/example1.txt
 
 > Uncommon, but for tougher puzzles copying some of the small example inputs in the
 > puzzle description can help identify the issue in my solution.
 
 Watch mode:
 
-    ./solve 2017 05 --watch
+    ./solve.ts 2017 05 --watch
 
 > My default mode when solving a puzzle.
 
 Initialize an empty puzzle folder:
 
-    ./solve 2017 05 --init
+    ./solve.ts 2017 05 --init
 
 > Creates template `index.js` and `input.txt` files in the desired folder.

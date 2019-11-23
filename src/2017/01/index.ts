@@ -1,9 +1,9 @@
 // ------------------------------------------------------------------------
 // Year 2017 Day 01
 // ------------------------------------------------------------------------
-const { log } = require('../../util');
+import { log } from '../../util';
 
-function captcha(string, jump) {
+function captcha(string: string, jump: number) {
     let sum = 0;
     for (let i = 0; i < string.length; i++) {
         let j = (i + jump) % string.length;

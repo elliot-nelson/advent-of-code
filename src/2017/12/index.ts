@@ -44,7 +44,7 @@ function getAllGroups(graph: Map<number, number[]>) {
   let groups = [];
   let remaining = new Set<number>(graph.keys());
 
-  while (remaining.size > 0) {
+  while (remaining.size > 0)  {
     let g = getAllConnected(graph, remaining.values().next().value);
     groups.push(g);
     for (let id of g) remaining.delete(id);
