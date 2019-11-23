@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node
+#!node_modules/.bin/ts-node
 
 // ------------------------------------------------------------------------
 // solver cli
@@ -160,7 +160,7 @@ function main() {
   let input = argv.input || 'input.txt';
 
   if (!year || !day) {
-    throw new UsageError('Usage: solve.ts <year> <day> [--watch] [--input file.txt]');
+    throw new UsageError('Usage: solve.ts <year> <day> [--init] [--watch] [--input file.txt]');
   }
 
   if (argv.init) {
