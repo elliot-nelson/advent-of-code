@@ -14,7 +14,18 @@
 // ------------------------------------------------------------------------
 import { log } from '../../util';
 
-function buildGrid(input) {
+interface State {
+  grid: string[][];
+  minY: number;
+  maxY: number;
+}
+
+interface Result {
+  touchedWater: number;
+  standingWater: number;
+}
+
+function buildState(input: string[]): State {
   let grid = [];
   let minY = Infinity, maxY = 0;
 
@@ -23,11 +34,10 @@ function buildGrid(input) {
     line.split(', ').forEach(wall => {
       let [key, value] = wall.split('=');
       if (value.indexOf('.') >= 0) {
-        value = value.split('..').map(x => parseInt(x, 10));
+        object[key] = value.split('..').map(x => parseInt(x, 10));
       } else {
-        value = [parseInt(value, 10), parseInt(value, 10)];
+        object[key] = [parseInt(value, 10), parseInt(value, 10)];
       }
-      object[key] = value;
     });
 
     for (let y = object.y[0]; y <= object.y[1]; y++) {
@@ -43,14 +53,18 @@ function buildGrid(input) {
   return { grid, minY, maxY };
 }
 
-function fill({ grid, minY, maxY }) {
+function simulate({ grid, minY, maxY }): Result {
   let queue = [{ x: 500, y: 0 }];
-  let water = {};
-  let add = (x, y) => {
-    if (y >= minY && y <= maxY) water[x + ',' + y] = true;
+  let touchedWater = new Set();
+  let standingWater = new Set();
+  let add = (x: number, y: number, standing: boolean) => {
+    if (y >= minY && y <= maxY) {
+      touchedWater.add(x + ',' + y);
+      if (standing) standingWater.add(x + ',' + y);
+    }
   }
 
-  add(500, 0);
+  add(500, 0, false);
 
   while (queue.length > 0) {
     let square = queue.shift();
@@ -66,12 +80,12 @@ function fill({ grid, minY, maxY }) {
     if (grid[square.y + 1][square.x] === undefined) {
       // Untraversed territory, so mark off and follow vertically
       grid[square.y][square.x] = '|';
-      add(square.x, square.y);
+      add(square.x, square.y, false);
       queue.unshift({ x: square.x, y: square.y + 1 });
     } else if (grid[square.y + 1][square.x] === '|') {
       // We've run into an existing water stream, ignore it
       grid[square.y][square.x] = '|';
-      add(square.x, square.y);
+      add(square.x, square.y, false);
       continue;
     } else if (grid[square.y + 1][square.x] === '#' || grid[square.y + 1][square.x] === '~') {
       // Wall or filled water line, let's investigate!
@@ -98,14 +112,14 @@ function fill({ grid, minY, maxY }) {
         // It's walled off!
         for (let i = leftX; i <= rightX; i++) {
           grid[square.y][i] = '~';
-          add(i, square.y);
+          add(i, square.y, true);
         }
         queue.unshift({ x: square.x, y: square.y - 1 });
       } else {
         // At least one side is open, so we need to follow the stream(s)
         for (let i = leftX; i <= rightX; i++) {
           grid[square.y][i] = '|';
-          add(i, square.y);
+          add(i, square.y, false);
         }
         if (leftOpen) queue.unshift({ x: leftX, y: square.y + 1 });
         if (rightOpen) queue.unshift({ x: rightX, y: square.y + 1 });
@@ -113,28 +127,20 @@ function fill({ grid, minY, maxY }) {
     }
   }
 
-  return Object.keys(water).length;
-}
-
-function countStandingWater({ grid, minY, maxY }) {
-  let water = 0;
-
-  for (let y = minY; y <= maxY; y++) {
-    for (let x = 0; x < grid[y].length; x++) {
-      if (grid[y][x] === '~') water++;
-    }
-  }
-
-  return water;
+  return {
+    touchedWater: touchedWater.size,
+    standingWater: standingWater.size
+  };
 }
 
 export function solve(input: string[]) {
   //// Part 1 ////
-  const state = buildGrid(input);
-  let result1 = fill(state);
+  const state = buildState(input);
+  const result = simulate(state);
+  let result1 = result.touchedWater;
   log.part1(result1);
 
   //// Part 2 ////
-  let result2 = countStandingWater(state);
+  let result2 = result.standingWater;
   log.part2(result2);
 };
