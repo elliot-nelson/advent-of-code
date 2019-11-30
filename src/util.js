@@ -4,6 +4,10 @@
 const chalk = require('chalk');
 
 const util = {
+  p: (...args) => console.log(...args),
+  part1: value => util.log.part1(value),
+  part2: value => util.log.part2(value),
+
   log: {
     info: console.log,
     part1: value => {
