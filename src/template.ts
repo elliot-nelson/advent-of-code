@@ -4,7 +4,7 @@
 import { p, part1, part2 } from '../../util';
 
 function something(input: string[]) {
-  return input.length;
+  return 1;
 }
 
 export function solve(input: string[]): void {
@@ -13,6 +13,6 @@ export function solve(input: string[]): void {
   part1(result1);
 
   //// Part 2 ////
-  let result2 = something(input);
+  let result2 = 2;
   part2(result2);
 };
