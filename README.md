@@ -4,7 +4,7 @@
 
 ## What is this?
 
-My personal just-for-fun archive of solutions for [Eric Wastl's](https://twitter.com/ericwastl) Advent of Code puzzles.
+My personal, just-for-fun archive of solutions for [Eric Wastl's](https://twitter.com/ericwastl) Advent of Code puzzles.
 
 ## My approach
 
@@ -12,10 +12,17 @@ I'm a fan of the adrenaline rush of solving the puzzle when it goes live, so don
 solutions tend to be straightforward brute force, unless I'm particularly inspired or happen to have a
 different approach in my back pocket already.
 
-After the dust settles, I might clean up my code (naming, debris), but I don't change the algorithm used.
-(Although for the interesting puzzles I have considered it -- I'll update this section if this ever changes.)
+After the dust settles, I'll take my initial mess and clean up the naming, add in types, remove extra console
+logging, etc., and then check it in. So what you see here might not be exactly what I ran the night of the
+puzzle, but it should be close.
 
 ## Solution runner
+
+I use a home-grown solution runner that lets me focus on editing code (and seeing whether it compiles, runs,
+and produces an output in my background terminal window). I could use out-of-the-box gulp watch or something,
+but I really want my particular input handling -- every time I save a `.txt` file in the folder for the
+day's challenge, my runner will switch to that input, allowing me to quickly test different example inputs
+when I'm debugging a problem in my code.
 
 Run the solution for a puzzle:
 
@@ -27,14 +34,14 @@ Provide an alternate input file:
 
     ./solve.ts 2017 05 --input src/2017/05/example1.txt
 
-> Uncommon, but for tougher puzzles copying some of the small example inputs in the
-> puzzle description can help identify the issue in my solution.
+> If you want to run a one-off example input.
 
 Watch mode:
 
     ./solve.ts 2017 05 --watch
 
-> My default mode when solving a puzzle.
+> My default mode when solving a puzzle. Automatically switches input files as they
+> are saved in the puzzle folder.
 
 Initialize an empty puzzle folder:
 
