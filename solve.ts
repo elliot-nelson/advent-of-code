@@ -17,7 +17,7 @@ function puzzleTitle(year: number, day: number) {
   return sprintf('Year %04d Day %02d', year, day);
 }
 
-function solve(year: number, day: number, input: string) {
+async function solve(year: number, day: number, input: string) {
   let startTime = new Date().getTime();
   let folder = puzzleFolder(year, day);
 
@@ -29,7 +29,8 @@ function solve(year: number, day: number, input: string) {
   let solution = require(sprintf('./src/%04d/%02d', year, day));
 
   // Support both "module.exports = function" and "export function"
-  solution.solve ? solution.solve(lines) : solution(lines);
+  let result = solution.solve ? solution.solve(lines) : solution(lines);
+  if (result instanceof Promise) await result;
 
   let endTime = new Date().getTime();
   console.log(sprintf('Finished (%07.4f seconds)', (endTime - startTime) / 1000));
@@ -94,11 +95,9 @@ class Watcher {
 
     clearCache();
 
-    try {
-      solve(parseInt(year, 10), parseInt(day, 10), this.currentInput);
-    } catch (error) {
+    solve(parseInt(year, 10), parseInt(day, 10), this.currentInput).catch(error => {
       console.log(chalk.red(error.stack));
-    }
+    });
   }
 }
 
