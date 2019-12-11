@@ -45,6 +45,9 @@ const util = {
       }
     }
     return array;
+  },
+  draw(array, chars) {
+    return array.map(row => row.map(col => chars[col]).join('')).join('\n');
   }
 };
 
