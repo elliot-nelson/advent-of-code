@@ -1,3 +1,7 @@
-.vscode
+# Outputs
+lib
+dist
+
+# Caching & Modules
 node_modules
-package-lock.json
+.heft
