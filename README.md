@@ -25,3 +25,10 @@ This is a shortcut for `heft test --watch --test-path-pattern 2021/03`.
 ```console
 yarn dev 2020/03
 ```
+
+### Initialize a new puzzle
+
+```console
+cp -r src/2021/template src/2021/02
+yarn dev 2021/02
+```
