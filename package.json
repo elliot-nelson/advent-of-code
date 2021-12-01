@@ -12,7 +12,10 @@
   },
   "author": "Elliot Nelson <nelson.work@gmail.com>",
   "license": "MIT",
-  "keywords": ["Advent of Code", "puzzle"],
+  "keywords": [
+    "Advent of Code",
+    "puzzle"
+  ],
   "devDependencies": {
     "@rushstack/heft": "^0.42.2",
     "@rushstack/heft-jest-plugin": "^0.1.46",
