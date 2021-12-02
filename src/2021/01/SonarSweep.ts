@@ -3,15 +3,14 @@
 
 import { ISolution } from '../../util';
 
-export function solve(input: string[]): ISolution {
+export function solve(input: string[]): ISolution<number> {
     const depths: number[] = input.map(line => parseInt(line, 10));
 
     // Part 1
     let count: number = depths.reduce((count, entry, idx) => {
         return count + (entry > depths[idx - 1] ? 1 : 0);
     }, 0);
-
-    const part1: number = count;
+    const part1 = count;
 
     // Part 2
     count = 0;
@@ -21,11 +20,7 @@ export function solve(input: string[]): ISolution {
 
         if (b > a) count++;
     }
+    const part2 = count;
 
-    const part2: number = count;
-
-    return {
-        part1: [String(part1)],
-        part2: [String(part2)]
-    };
+    return { part1, part2 };
 }

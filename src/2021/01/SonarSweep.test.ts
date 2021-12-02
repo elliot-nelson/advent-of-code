@@ -9,15 +9,15 @@ describe('SonarSweep', () => {
         const input = load(__dirname, 'example1.txt');
         const solution = solve(input);
 
-        expect(solution.part1).toEqual(['7']);
-        expect(solution.part2).toEqual(['5']);
+        expect(solution.part1).toEqual(7);
+        expect(solution.part2).toEqual(5);
     });
 
     it('runs my input', () => {
         const input = load(__dirname, 'input.txt');
         const solution = solve(input);
 
-        expect(solution.part1).toEqual(['1162']);
-        expect(solution.part2).toEqual(['1190']);
+        expect(solution.part1).toEqual(1162);
+        expect(solution.part2).toEqual(1190);
     });
 });
