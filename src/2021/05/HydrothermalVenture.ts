@@ -7,6 +7,7 @@ type Point = {
     x: number;
     y: number;
 }
+
 type Line = Point[];
 
 function countIntersections(lines: Line[], includeDiagonals: boolean): number {
