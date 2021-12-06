@@ -3,7 +3,7 @@
 
 import { ISolution } from '../../util';
 
-interface Command {
+type Command = {
     dir: string;
     units: number;
 }
