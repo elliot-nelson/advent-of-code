@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TransparentOrigami runs example 1 1`] = `
+"#####
+#   #
+#   #
+#   #
+#####"
+`;
+
+exports[`TransparentOrigami runs my input 1`] = `
+"#### ###  #     ##  ###  #  # #    ###
+#    #  # #    #  # #  # #  # #    #  #
+###  #  # #    #    #  # #  # #    #  #
+#    ###  #    # ## ###  #  # #    ###
+#    #    #    #  # # #  #  # #    # #
+#### #    ####  ### #  #  ##  #### #  #"
+`;
