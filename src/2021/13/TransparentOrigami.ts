@@ -41,12 +41,6 @@ export function solve(input: string[]): ISolution<string> {
         return { axis: elem[0], value: Number(elem[1]) };
     });
 
-    let krab: number[] = [];
-    for (let i = 0; i < 20000000; i++) {
-        krab.push(Math.sqrt(i));
-        if (i % 1000000 === 0) console.log(i);
-    }
-
     // Part 1
     fold(dots, instructions[0]);
     const part1: string = String(countUnique(dots));

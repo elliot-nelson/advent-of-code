@@ -6,7 +6,7 @@ import { solve } from './TransparentOrigami';
 
 describe('TransparentOrigami', () => {
     it('runs example 1', () => {
-        const input = load(__dirname, '../../src/2021/13/', 'example1.txt');
+        const input = load(__dirname, 'example1.txt');
         const solution = solve(input);
 
         expect(solution.part1).toEqual('17');
