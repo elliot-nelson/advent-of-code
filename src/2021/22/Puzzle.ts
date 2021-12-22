@@ -83,6 +83,18 @@ function subtract(a: Cuboid, b: Cuboid): Cuboid[] {
 }
 
 function consolidate(cuboidSet: Cuboid[]): Cuboid[] {
+    // In order to avoid an exploding number of cuboids, which slows the
+    // progress down to a crawl about halfway to the solution, we can try to
+    // "consolidate" cuboids that have identical sizes in 2 axes and are next
+    // to each other in the remaining axis.
+    //
+    // This SIGNIFICANTLY decreases number of cuboids (for example, around Step 250
+    // in my input, brings number down from ~4500 to ~1200).
+    //
+    // However doing this cleanup adds its own expensive N*N operation... I've tried
+    // to limit that by only looking +/-50 cuboids from your own cuboid in the list,
+    // but the right answer is probably to make the logic in the subtract function
+    // above smarter (i.e..... way more complicated).
     for (let i = 0; i < cuboidSet.length; i++) {
         for (let j = Math.max(i - 50, 0); j < Math.min(i + 50, cuboidSet.length); j++) {
             let a = cuboidSet[i], b = cuboidSet[j];
