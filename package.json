@@ -4,7 +4,8 @@
   "description": "My collection of Advent of Code solutions, written in TypeScript",
   "scripts": {
     "test": "heft test",
-    "dev": "heft test --watch --test-path-pattern "
+    "dev": "heft test --watch --test-path-pattern ",
+    "run": "heft build && jest --test-path-pattern "
   },
   "repository": {
     "type": "git",
