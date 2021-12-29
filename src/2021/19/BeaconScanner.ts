@@ -58,7 +58,7 @@ function reorient(pos: number[], orientation: number) {
         case 8: return [x, -z, y];
         case 9: return [-z, -x, y];
         case 10: return [-x, z, y];
-        case 11: return [-z, x, y];
+        case 11: return [z, x, y];
 
         case 12: return [x, z, -y];
         case 13: return [-z, x, -y];
@@ -105,8 +105,6 @@ export function solve(input: string[]): ISolution<number> {
         return section.split('\n').slice(1).map(line => line.split(',').map(Number));
     });
 
-    console.log('hey');
-
     // If a field hasn't been translated into the coordinate system of Field 0,
     // it's "unknown". As we find matches and translate/orient beacon fields into
     // the coordinate system of Field 0, they become known.
@@ -116,24 +114,17 @@ export function solve(input: string[]): ISolution<number> {
         [0, 0, 0]
     ];
 
-    console.log('mook');
-
-    while (unknown.length > 0) {
-        console.log('known', known.length, 'unknown', unknown.length);
-        for (let i = 0; i < known.length; i++) {
-            for (let j = 0; j < unknown.length; j++) {
-                let field = overlayBeaconFields(known[i], unknown[j]);
-                if (field) {
-                    console.log('FIELD');
-                    scanners.push(field.scanner);
-                    known.push(field.beacons);
-                    unknown.splice(j, 1);
-                    break;
-                }
+    for (let i = 0; i < known.length; i++) {
+        for (let j = 0; j < unknown.length; j++) {
+            let field = overlayBeaconFields(known[i], unknown[j]);
+            if (field) {
+                scanners.push(field.scanner);
+                known.push(field.beacons);
+                unknown.splice(j, 1);
+                j--;
             }
         }
     }
-
 
     // Part 1
     const allBeacons: number[][] = [];

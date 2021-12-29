@@ -6,7 +6,6 @@ import { solve } from './BeaconScanner';
 
 describe('BeaconScanner', () => {
     it('runs example 1', () => {
-        return;
         const input = load(__dirname, 'example1.txt');
         const solution = solve(input);
 
@@ -18,8 +17,7 @@ describe('BeaconScanner', () => {
         const input = load(__dirname, 'input.txt');
         const solution = solve(input);
 
-        //console.log(solution);
-        expect(solution.part1).toEqual(0);
-        expect(solution.part2).toEqual(0);
+        expect(solution.part1).toEqual(394);
+        expect(solution.part2).toEqual(12304);
     });
 });
