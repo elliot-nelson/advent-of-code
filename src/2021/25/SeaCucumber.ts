@@ -53,7 +53,8 @@ export function solve(input: string[]): ISolution<number> {
     const part1: number = steps;
 
     // Part 2
-    //console.log('part2');
+    //
+    // Finished!
     const part2 = 0;
 
     return { part1, part2 };
