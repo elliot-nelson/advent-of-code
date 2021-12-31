@@ -1,5 +1,5 @@
-// Year 2021 Day xx
-// xx
+// Year 2021 Day 22
+// Reactor Reboot
 
 import { ISolution } from '../../util';
 
@@ -92,11 +92,11 @@ function consolidate(cuboidSet: Cuboid[]): Cuboid[] {
     // in my input, brings number down from ~4500 to ~1200).
     //
     // However doing this cleanup adds its own expensive N*N operation... I've tried
-    // to limit that by only looking +/-50 cuboids from your own cuboid in the list,
+    // to limit that by only looking +/-30 cuboids from your own cuboid in the list,
     // but the right answer is probably to make the logic in the subtract function
     // above smarter (i.e..... way more complicated).
     for (let i = 0; i < cuboidSet.length; i++) {
-        for (let j = Math.max(i - 50, 0); j < Math.min(i + 50, cuboidSet.length); j++) {
+        for (let j = Math.max(i - 30, 0); j < Math.min(i + 30, cuboidSet.length); j++) {
             let a = cuboidSet[i], b = cuboidSet[j];
 
             if (a.x[0] === b.x[0] && a.x[1] === b.x[1] &&
@@ -146,9 +146,16 @@ function applyStep(cuboidSet: Cuboid[], step: Step): Cuboid[] {
     if (step.instr === 'off') {
         // To apply an OFF instruction, we take the input cuboid and
         // subtract it from every existing cuboid in the set.
+        //
+        // Note the "mini consolidation" of the new set of cuboids we are adding.
+        let newSet: Cuboid[] = [];
         for (const cuboid of cuboidSet) {
-            results = results.concat(subtract(cuboid, step));
+            newSet.push(...subtract(cuboid, step));
         }
+        results = results.concat(consolidate(newSet));
+
+            //results = results.concat(consolidate(subtract(cuboid, step)));
+        //}
     } else {
         // To apply an ON instruction, we create a new cuboid set out
         // the incoming cuboid and subtract every existing cuboid from
@@ -158,6 +165,9 @@ function applyStep(cuboidSet: Cuboid[], step: Step): Cuboid[] {
         // because each time we subtract we could end up with more cubes, and
         // each of those cubes also needs to have the remaining cuboids in the
         // set subtracted from it.
+        //
+        // Note the "mini consolidation" of the new set of cuboids we are adding.
+        // (Helps the overall time considerably, cuts it down from ~30s to ~16s).
         let newSet: Cuboid[] = [step];
         for (const cuboid of cuboidSet) {
             let tempSet: Cuboid[] = [];
@@ -167,7 +177,7 @@ function applyStep(cuboidSet: Cuboid[], step: Step): Cuboid[] {
             newSet = tempSet;
         }
 
-        results = cuboidSet.concat(newSet);
+        results = cuboidSet.concat(consolidate(newSet));
     }
 
     return results;
@@ -186,75 +196,16 @@ export function solve(input: string[]): ISolution<number> {
 
     let cuboids: Cuboid[] = [];
 
-    let stepNo: number = 0;
-
     for (let step of steps) {
-        stepNo++;
-        console.log('step', stepNo, 'cuboids', cuboids.length);
-
-        //if (withinReactorCore(step)) {
-            if (true) {
-            cuboids = applyStep(cuboids, step);
-            cuboids = consolidate(cuboids);
-/*
-            for (let x = step.x[0]; x <= step.x[1]; x++) {
-                for (let y = step.y[0]; y <= step.y[1]; y++) {
-                    for (let z = step.z[0]; z <= step.z[1]; z++) {
-                        matrix[`${x},${y},${z}`] = (step.instr === 'on' ? 1 : 0);
-                    }
-                }
-            }
-
-
-            console.log('POST-STEP:');
-            let a = Object.values(matrix).reduce((s,v) => s + v);
-            let b = cuboids.map(volume).reduce((s, v) => s + v);
-            console.log('  Matrix:  ' + a);
-            console.log('  Cuboids: ' + b);
-            if (a !== b) {
-                console.log('bad', step);
-                throw 3;
-            }
-*/
-        } else {
-            console.log('skip');
-        }
+        cuboids = applyStep(cuboids, step);
+        cuboids = consolidate(cuboids);
     }
 
-    //console.log(cuboids);
-
-    console.log(cuboids.map(volume).reduce((s,v) => s + v, 0));
-
-    /*for (let x of cuboids) {
-        console.log(x, volume(x));
-    }*/
-
-    //console.log(cuboids.map(volume));
-
-/*
-    console.log(steps);
-
-    let a: Cuboid = { x: [0, 10], y: [0, 10], z: [0, 10] };
-    //let b: Cuboid = { x: [-4, 4], y: [-4, 4], z: [-4, 4] };
-    let b: Cuboid = { x: [-10, 20], y: [-10, 20], z: [0, 9] };
-
-    let c: Cuboid[] = subtract(a,b);
-
-    console.log(subtract(a,b));
-
-    console.log(volume(a));
-    console.log(volume(b));
-    console.log(volume(a) - volume(b));
-    console.log(c.map(volume).reduce((s,v) => s+v));
-*/
-
     // Part 1
-    //console.log('part1');
-    const part1 = 0;
+    const part1: number = cuboids.filter(withinReactorCore).map(volume).reduce((sum, value) => sum + value);
 
     // Part 2
-    //console.log('part2');
-    const part2 = 0;
+    const part2: number = cuboids.map(volume).reduce((sum, value) => sum + value);
 
     return { part1, part2 };
 }
