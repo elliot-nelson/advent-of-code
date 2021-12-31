@@ -1,4 +1,5 @@
 {
   "extends": "@rushstack/heft-jest-plugin/includes/jest-shared.config.json",
-  "maxWorkers": 1
+  "reporters": ["default"],
+  "collectCoverage": false
 }
