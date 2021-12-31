@@ -2,9 +2,9 @@
 // Snailfish
 
 import { load }  from '../../util';
-import { solve } from './Puzzle';
+import { solve } from './Snailfish';
 
-describe('Puzzle', () => {
+describe('Snailfish', () => {
     it('runs example 1', () => {
         const input = load(__dirname, 'example1.txt');
         const solution = solve(input);
