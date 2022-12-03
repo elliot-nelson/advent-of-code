@@ -18,3 +18,19 @@ export function load(...paths: string[]): string[] {
 
     return lines;
 }
+
+export const Util = {
+    group<T>(array: T[], count: number): T[][] {
+        const result: T[][] = [];
+
+        for (let i = 0; i < array.length / count; i++) {
+            let k: T[] = [];
+            for (let j = 0; j < count; j++) {
+                k.push(array[i * count + j]);
+            }
+            result.push(k);
+        }
+
+        return result;
+    }
+};
