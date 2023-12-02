@@ -1,6 +1,10 @@
-# 2023 Day 2
+# 2023 Day 02
 
 class Day02
+    def self.title
+        "Cube Conundrum"
+    end
+
     def self.part1(lines)
         games = lines.map { |line|
             m = line.match(/Game (\d+): (.+)/)
@@ -49,6 +53,9 @@ end
 
 if $0 == __FILE__
     input = ARGV[0] || "input.txt"
-    puts Day2.part1(File.read(input).split("\n"))
-    puts Day2.part2(File.read(input).split("\n"))
+    puts "--- #{Day02.title} ---"
+    part1 = Day02.part1(File.read(input).split("\n"))
+    puts "Part 1: #{part1}"
+    part2 = Day02.part2(File.read(input).split("\n"))
+    puts "Part 2: #{part2}"
 end

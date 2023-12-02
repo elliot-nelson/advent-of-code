@@ -1,6 +1,10 @@
 # 2023 Day 01
 
 class Day01
+    def self.title
+        "Trebuchet?!"
+    end
+
     def self.part1(lines)
         values = lines.map { |line, idx|
             digits = line.scan(/\d/)
@@ -37,6 +41,9 @@ end
 
 if $0 == __FILE__
     input = ARGV[0] || "input.txt"
-    puts Day01.part1(File.read(input).split("\n"))
-    puts Day01.part2(File.read(input).split("\n"))
+    puts "--- #{Day01.title} ---"
+    part1 = Day01.part1(File.read(input).split("\n"))
+    puts "Part 1: #{part1}"
+    part2 = Day01.part2(File.read(input).split("\n"))
+    puts "Part 2: #{part2}"
 end
