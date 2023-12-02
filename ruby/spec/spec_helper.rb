@@ -96,3 +96,9 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
 end
+
+LIB_DIR = "#{__dir__}/../lib"
+
+def load_input(filepath)
+  File.read("#{LIB_DIR}/#{filepath}").split("\n")
+end
